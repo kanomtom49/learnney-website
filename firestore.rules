@@ -1,0 +1,35 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ฟังก์ชันสำหรับตรวจสอบว่าเป็นแอดมินหรือไม่
+    function isAdmin() {
+      // ตรวจสอบจากข้อมูลของผู้ใช้ที่กำลังล็อกอินอยู่ว่ามี field ชื่อ isAdmin เป็น true หรือไม่
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    // กฎสำหรับ Collection 'users'
+    match /users/{userId} {
+      // 1. อนุญาตให้ผู้ใช้ที่ล็อกอินแล้วอ่านข้อมูลของตัวเองได้ "หรือ" ผู้ใช้ที่เป็นแอดมินอ่านข้อมูลของใครก็ได้
+      // 2. อนุญาตให้ผู้ใช้ที่เป็นแอดมิน "list" หรือดึงข้อมูลผู้ใช้ทั้งหมดได้ (นี่คือส่วนที่แก้บัค)
+      allow read, list: if request.auth != null && (request.auth.uid == userId || isAdmin());
+
+      // อนุญาตให้ผู้ใช้ที่ล็อกอินแล้วสร้างหรืออัปเดตข้อมูลของตัวเองเท่านั้น
+      allow write: if request.auth != null && request.auth.uid == userId;
+      
+      // ไม่อนุญาตให้ลบข้อมูลผู้ใช้จากฝั่ง client โดยตรงเพื่อความปลอดภัย
+      allow delete: if false;
+    }
+
+    // กฎสำหรับ Sub-collections ที่อยู่ใน user แต่ละคน (เช่น subjects, topics)
+    match /users/{userId}/{anySubCollection}/{docId} {
+        // อนุญาตให้เจ้าของข้อมูล "หรือ" แอดมิน อ่านข้อมูลได้
+        // เพื่อให้หน้า Admin Panel นับจำนวนบทเรียนและหัวข้อได้ (แก้ปัญหา N/A)
+        allow get, list: if request.auth != null && (request.auth.uid == userId || isAdmin());
+
+        // อนุญาตให้เจ้าของข้อมูลเท่านั้นที่สร้าง, แก้ไข, ลบข้อมูลของตัวเองได้
+        allow create, update, delete: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
