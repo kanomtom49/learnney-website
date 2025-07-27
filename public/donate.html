@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สนับสนุน - Learnney</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/material-rounded/48/3b82f6/double-tick.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #3b82f6; --primary-green: #22c55e; --primary-orange: #f97316;
+            --bg-light: #f8f9fa; --bg-white: #ffffff;
+            --text-dark: #1f2937; --text-secondary: #6b7280; --border-color: #e5e7eb;
+            --font-family: 'Inter', 'Sarabun', sans-serif;
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .donate-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: var(--bg-white);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .donate-header { margin-bottom: 2rem; }
+        .donate-header .icon { font-size: 3rem; color: var(--primary-blue); margin-bottom: 1rem; }
+        .donate-header h1 { font-family: 'Sarabun', sans-serif; font-size: 2rem; font-weight: 700; }
+        .donate-header p { color: var(--text-secondary); font-size: 1rem; margin-top: 0.5rem; max-width: 400px; margin-left: auto; margin-right: auto; }
+
+        .payment-options { display: grid; gap: 1rem; }
+        .payment-btn {
+            display: flex; align-items: center; gap: 1rem; width: 100%;
+            padding: 1.25rem; border-radius: 12px; border: 2px solid var(--border-color);
+            background-color: transparent; cursor: pointer; transition: all 0.2s ease-in-out; text-align: left;
+        }
+        .payment-btn:hover { transform: translateY(-4px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-color: var(--primary-blue); }
+        .payment-btn img { width: 48px; height: 48px; object-fit: contain; border-radius: 8px; }
+        .payment-btn .text-content h3 { font-size: 1.125rem; font-weight: 600; color: var(--text-dark); }
+        .payment-btn .text-content p { font-size: 0.9rem; color: var(--text-secondary); }
+
+        .back-link { display: inline-block; margin-top: 2rem; color: var(--text-secondary); text-decoration: none; font-weight: 500; }
+        .back-link:hover { color: var(--primary-blue); }
+
+        /* --- Modal Styles --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+            z-index: 1000; display: none; justify-content: center; align-items: center;
+            padding: 1rem; animation: fadeInModal 0.3s ease;
+        }
+        .modal-overlay.show { display: flex; }
+        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-content {
+            background-color: var(--bg-white); padding: 2rem; border-radius: 16px;
+            width: 100%; max-width: 400px; text-align: center; position: relative;
+            animation: slideInUpModal 0.4s ease;
+        }
+        @keyframes slideInUpModal { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        #modal-close-btn {
+            position: absolute; top: 1rem; right: 1rem; background: none; border: none;
+            font-size: 1.5rem; color: var(--text-secondary); cursor: pointer;
+        }
+        #modal-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; }
+        #qr-image-container { margin-bottom: 1.5rem; }
+        #qr-image {
+            width: 100%; max-width: 280px; height: auto; border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        #promptpay-info { background-color: var(--bg-light); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+        #promptpay-info p { margin: 0; color: var(--text-secondary); font-size: 0.9rem; }
+        #promptpay-info span { font-family: monospace; font-size: 1.25rem; font-weight: 600; color: var(--text-dark); letter-spacing: 1px; }
+        #copy-btn {
+            width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;
+            background-color: var(--bg-white); color: var(--text-dark); font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: background-color 0.2s;
+        }
+        #copy-btn:hover { background-color: var(--bg-light); }
+        #copy-btn i { margin-right: 0.5rem; }
+    </style>
+</head>
+<body>
+
+    <div class="donate-container">
+        <div class="donate-header">
+            <div class="icon"><i class="fa-solid fa-cookie-bite"></i></div>
+            <h1>สนับสนุนค่าขนม</h1>
+            <p>การสนับสนุนของคุณเป็นกำลังใจสำคัญในการพัฒนา Learnney ให้ดียิ่งขึ้นไป ขอบคุณครับ!</p>
+        </div>
+
+        <div class="payment-options">
+            <button class="payment-btn" data-payment="kplus">
+                <img src="https://i.ibb.co/bF0W3v7/kplus-logo.png" alt="K-PLUS Logo" onerror="this.src='https://placehold.co/48x48/22c55e/FFFFFF?text=K'">
+                <div class="text-content">
+                    <h3>K-PLUS (พร้อมเพย์)</h3>
+                    <p>สแกน QR Code ผ่านแอปธนาคาร</p>
+                </div>
+            </button>
+            <button class="payment-btn" data-payment="truewallet">
+                <img src="https://i.ibb.co/yQ6fSKb/true-wallet-logo.png" alt="True Money Wallet Logo" onerror="this.src='https://placehold.co/48x48/f97316/FFFFFF?text=T'">
+                <div class="text-content">
+                    <h3>True Money Wallet</h3>
+                    <p>สแกน QR Code หรือส่งด้วยเบอร์โทร</p>
+                </div>
+            </button>
+        </div>
+
+        <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าหลัก</a>
+    </div>
+
+    <div id="qr-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close-btn">&times;</button>
+            <h2 id="modal-title"></h2>
+            <div id="qr-image-container">
+                <img id="qr-image" src="" alt="Payment QR Code" onerror="this.src='https://placehold.co/280x280/e5e7eb/6b7280?text=QR+Error'">
+            </div>
+            <div id="promptpay-info" style="display: none;">
+                <p id="promptpay-label"></p>
+                <span id="promptpay-number"></span>
+            </div>
+            <button id="copy-btn" style="display: none;">
+                <i class="fa-solid fa-copy"></i>
+                <span id="copy-text">คัดลอกหมายเลข</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // --- ข้อมูลสำหรับแต่ละช่องทาง (แก้ไขข้อมูลของคุณตรงนี้) ---
+            const paymentData = {
+                kplus: {
+                    title: 'สแกนเพื่อจ่ายด้วย K-PLUS',
+                    qrSrc: 'https://promptpay.io/0971682075', // <<!>> แก้ไขเป็นเบอร์พร้อมเพย์ของคุณ
+                    showInfo: true,
+                    infoLabel: 'ชื่อบัญชี: อมรเทพ เกษจันทร์',
+                    infoNumber: '097-168-2075' // <<!>> แก้ไขเป็นเบอร์โทรของคุณ
+                },
+                truewallet: {
+                    title: 'สแกนเพื่อจ่ายด้วย True Wallet',
+                    qrSrc: 'https://img5.pic.in.th/file/secure-sv1/IMG_9771985abcefae9f1516.jpeg', // <<!>> แก้ไขเป็นลิงก์รูป QR True Wallet ของคุณ
+                    showInfo: true,
+                    infoLabel: 'True Wallet (เบอร์โทร)',
+                    infoNumber: '097-168-2075' // <<!>> แก้ไขเป็นเบอร์โทรของคุณ
+                }
+            };
+
+            // --- ส่วนของโค้ด (ไม่ต้องแก้ไข) ---
+            const elements = {
+                modal: document.getElementById('qr-modal'),
+                modalCloseBtn: document.getElementById('modal-close-btn'),
+                modalTitle: document.getElementById('modal-title'),
+                qrImage: document.getElementById('qr-image'),
+                infoContainer: document.getElementById('promptpay-info'),
+                infoLabel: document.getElementById('promptpay-label'),
+                infoNumber: document.getElementById('promptpay-number'),
+                copyBtn: document.getElementById('copy-btn'),
+                copyText: document.getElementById('copy-text'),
+                paymentButtons: document.querySelectorAll('.payment-btn')
+            };
+
+            // ตรวจสอบว่า Element ที่จำเป็นทั้งหมดมีอยู่จริงหรือไม่
+            for (const key in elements) {
+                if (!elements[key] || (elements[key] instanceof NodeList && elements[key].length === 0)) {
+                    console.error(`Error: ไม่พบ Element ที่จำเป็น: ${key}`);
+                    document.body.innerHTML = `<div style="font-family: sans-serif; padding: 2rem; text-align: center;">เกิดข้อผิดพลาดในการโหลดหน้าเว็บ กรุณาลองใหม่อีกครั้ง</div>`;
+                    return; // หยุดการทำงานของสคริปต์
+                }
+            }
+
+            function openModal(type) {
+                const data = paymentData[type];
+                if (!data) return;
+
+                elements.modalTitle.textContent = data.title;
+                elements.qrImage.src = data.qrSrc;
+                elements.qrImage.alt = `${data.title} QR Code`;
+
+                if (data.showInfo) {
+                    elements.infoContainer.style.display = 'block';
+                    elements.copyBtn.style.display = 'block';
+                    elements.infoLabel.textContent = data.infoLabel;
+                    elements.infoNumber.textContent = data.infoNumber;
+                } else {
+                    elements.infoContainer.style.display = 'none';
+                    elements.copyBtn.style.display = 'none';
+                }
+                elements.modal.classList.add('show');
+            }
+
+            function closeModal() {
+                elements.modal.classList.remove('show');
+                elements.copyText.textContent = 'คัดลอกหมายเลข';
+            }
+
+            elements.paymentButtons.forEach(button => {
+                button.addEventListener('click', () => openModal(button.dataset.payment));
+            });
+
+            elements.modalCloseBtn.addEventListener('click', closeModal);
+            elements.modal.addEventListener('click', e => {
+                if (e.target === elements.modal) closeModal();
+            });
+
+            elements.copyBtn.addEventListener('click', () => {
+                const numberToCopy = elements.infoNumber.textContent.replace(/-/g, '');
+                if (!navigator.clipboard) {
+                    // Fallback for older browsers
+                    try {
+                        const tempInput = document.createElement('input');
+                        document.body.appendChild(tempInput);
+                        tempInput.value = numberToCopy;
+                        tempInput.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tempInput);
+                        elements.copyText.textContent = 'คัดลอกแล้ว!';
+                    } catch (err) {
+                        elements.copyText.textContent = 'คัดลอกไม่สำเร็จ';
+                    }
+                } else {
+                    // Modern way
+                    navigator.clipboard.writeText(numberToCopy).then(() => {
+                        elements.copyText.textContent = 'คัดลอกแล้ว!';
+                    }).catch(err => {
+                        console.error('ไม่สามารถคัดลอกได้:', err);
+                        elements.copyText.textContent = 'คัดลอกไม่สำเร็จ';
+                    });
+                }
+                setTimeout(() => { elements.copyText.textContent = 'คัดลอกหมายเลข'; }, 2500);
+            });
+        });
+    </script>
+</body>
+</html>
