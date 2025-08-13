@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found - หลงทางในมหาสมุทร</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0d47a1; /* Deep Blue */
+            --secondary-color: #1976d2; /* Medium Blue */
+            --accent-color: #42a5f5; /* Light Blue */
+            --highlight-color: #bbdefb; /* Very Light Blue */
+            --text-color: #ffffff;
+            --mouse-x: 50%; /* Default mouse position */
+            --mouse-y: 50%; /* Default mouse position */
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(160deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-color);
+            overflow: hidden; /* Hide scrollbars and anything that goes off-screen */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative; /* Needed for pseudo-element positioning */
+        }
+
+        /* Spotlight effect that follows the mouse */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allows clicking through the element */
+            background: radial-gradient(
+                circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.15) 0%,
+                rgba(255, 255, 255, 0.05) 20%,
+                rgba(0, 0, 0, 0.2) 60%,
+                rgba(0, 0, 0, 0.5) 100%
+            );
+            z-index: 2;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-code {
+            font-size: clamp(8rem, 30vw, 20rem); /* Responsive font size */
+            font-weight: 700;
+            line-height: 1;
+            text-shadow: 
+                0 5px 15px rgba(0,0,0,0.2),
+                0 10px 20px rgba(0,0,0,0.15),
+                0 0 2px var(--highlight-color),
+                0 0 10px var(--accent-color),
+                0 0 20px var(--accent-color);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Gentle floating animation for the 404 text */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .message {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin-top: -20px;
+            font-weight: 400;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .home-button {
+            margin-top: 30px;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background-color: var(--highlight-color);
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .home-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            background-color: #fff;
+            color: var(--secondary-color);
+        }
+
+        /* Bubbles rising from the bottom */
+        .bubbles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -50px; /* Start below the screen */
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            animation: rise 10s infinite ease-in;
+            box-shadow: 0 0 5px rgba(255,255,255,0.2);
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120vh) scale(0.5); /* Rise up and shrink */
+                opacity: 0;
+            }
+        }
+
+        /* Fish swimming across the screen */
+        .fish-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .fish {
+            position: absolute;
+            width: 50px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: swim 15s linear infinite;
+        }
+
+        .fish::before, .fish::after {
+            content: '';
+            position: absolute;
+        }
+
+        /* Fish Tail */
+        .fish::before {
+            width: 0;
+            height: 0;
+            border-left: 15px solid var(--accent-color);
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            right: 45px;
+            top: 0;
+            animation: tail-wag 0.5s linear infinite;
+        }
+
+        /* Fish Eye */
+        .fish::after {
+            width: 5px;
+            height: 5px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            left: 10px;
+            top: 5px;
+        }
+
+        @keyframes swim {
+            from { transform: translateX(-100px); }
+            to { transform: translateX(110vw); }
+        }
+
+        @keyframes tail-wag {
+            0% { transform: rotate(10deg); }
+            50% { transform: rotate(-10deg); }
+            100% { transform: rotate(10deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="bubbles-container" id="bubbles-container">
+        <!-- Bubbles will be generated by JavaScript -->
+    </div>
+
+    <div class="fish-container" id="fish-container">
+        <!-- Fish will be generated by JavaScript -->
+    </div>
+
+    <div class="container">
+        <div class="error-code">404</div>
+        <p class="message">ดูเหมือนว่าคุณจะหลงทางในมหาสมุทร</p>
+        <a href="/" class="home-button">กลับสู่ผิวน้ำ</a>
+    </div>
+
+    <script>
+        // Script to handle mouse move for the spotlight effect
+        document.addEventListener('mousemove', (e) => {
+            // We set the CSS variables --mouse-x and --mouse-y
+            // to the mouse position as a percentage of the viewport width and height.
+            document.body.style.setProperty('--mouse-x', `${(e.clientX / window.innerWidth) * 100}%`);
+            document.body.style.setProperty('--mouse-y', `${(e.clientY / window.innerHeight) * 100}%`);
+        });
+
+        // --- Dynamic Element Generation ---
+
+        // Function to generate bubbles
+        const bubbleContainer = document.getElementById('bubbles-container');
+        const numBubbles = 30;
+
+        for (let i = 0; i < numBubbles; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+
+            const size = Math.random() * 40 + 10; // size between 10px and 50px
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+
+            bubble.style.left = `${Math.random() * 100}%`; // random horizontal position
+
+            const duration = Math.random() * 8 + 7; // duration between 7s and 15s
+            const delay = Math.random() * 5; // delay up to 5s
+            bubble.style.animationDuration = `${duration}s`;
+            bubble.style.animationDelay = `${delay}s`;
+
+            bubbleContainer.appendChild(bubble);
+        }
+
+        // Function to generate fish
+        const fishContainer = document.getElementById('fish-container');
+        const numFish = 5;
+
+        for (let i = 0; i < numFish; i++) {
+            const fish = document.createElement('div');
+            fish.classList.add('fish');
+
+            fish.style.top = `${Math.random() * 80 + 10}%`; // random vertical position
+
+            const duration = Math.random() * 10 + 10; // duration between 10s and 20s
+            const delay = Math.random() * 10; // delay up to 10s
+            fish.style.animationDuration = `${duration}s`;
+            fish.style.animationDelay = `${delay}s`;
+
+            // Randomly make some fish swim the other way
+            if (Math.random() > 0.5) {
+                fish.style.transform = 'scaleX(-1)'; // Flip the fish horizontally
+            }
+
+            fishContainer.appendChild(fish);
+        }
+    </script>
+</body>
+</html>

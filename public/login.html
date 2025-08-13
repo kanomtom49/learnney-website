@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ยินดีต้อนรับ - Learnney</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/material-rounded/48/6366f1/double-tick.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* --- [ จุดที่ 1: ปรับปรุง Design System และ Variables ] --- */
+        :root {
+            --primary-accent: #6366f1;         /* สีหลักใหม่ (Indigo) */
+            --primary-accent-hover: #4f46e5;    /* สีหลักเมื่อ hover */
+            --bg-light: #f7f8fc;                /* สีพื้นหลังอ่อนลง */
+            --bg-white: #ffffff;
+            --text-dark: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #dde1e7;
+            --danger-text: #ef4444;
+            --success-text: #22c55e;
+            --font-family: 'Inter', 'Sarabun', sans-serif;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+            --border-radius-md: 10px;           /* ค่าความโค้งมน */
+            --border-radius-lg: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { height: 100%; }
+        body {
+            font-family: var(--font-family); background-color: var(--bg-light); color: var(--text-dark);
+            min-height: 100%;
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+        }
+
+        .main-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* --- [ จุดที่ 2: Hero Panel โฉมใหม่พร้อม Animated Gradient ] --- */
+        .hero-panel {
+            display: none;
+            position: relative;
+            width: 55%;
+            /* พื้นหลังแบบไล่สีและเคลื่อนไหว */
+            background: linear-gradient(-45deg, #4f46e5, #7c3aed, #db2777, #f59e0b);
+            background-size: 400% 400%;
+            animation: animated-gradient 18s ease infinite;
+        }
+        @keyframes animated-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.2); /* ทำให้ข้อความอ่านง่ายขึ้น */
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 4rem;
+            color: white;
+        }
+        .hero-overlay h1 { font-size: 2.75rem; margin-bottom: 1rem; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.3);}
+        .hero-overlay p { font-size: 1.1rem; max-width: 480px; line-height: 1.6; opacity: 0.9; }
+        .hero-quote {
+            margin-top: 3rem; font-size: 1rem; font-style: italic; opacity: 0.8;
+            border-left: 3px solid var(--primary-accent); padding-left: 1.5rem;
+        }
+
+        /* --- [ จุดที่ 3: ปรับดีไซน์ Form Panel ให้ดูสะอาดตา ] --- */
+        .form-panel {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        @media (min-width: 768px) {
+            .hero-panel { display: flex; }
+            .form-panel { width: 45%; }
+        }
+
+        .form-wrapper { 
+            width: 100%; max-width: 420px; 
+            background: var(--bg-white);
+            padding: 2.5rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+        .view { animation: fadeIn 0.4s ease; }
+        .hidden { display: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-header { text-align: center; margin-bottom: 2rem; }
+        .form-header a { font-size: 1.75rem; font-weight: 700; color: var(--text-dark); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 0.5rem; }
+        .form-header a i { color: var(--primary-accent); }
+        h2 { text-align: center; font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark); }
+        .form-intro { text-align: center; color: var(--text-secondary); margin-bottom: 1.5rem; }
+
+        /* --- [ จุดที่ 4: ปรับปรุง Input fields และ Buttons ] --- */
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .input-wrapper { position: relative; }
+        .input-wrapper .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
+        .form-group input { 
+            width: 100%; padding: 0.85rem 0.85rem 0.85rem 2.8rem; border-radius: var(--border-radius-md); 
+            border: 1px solid var(--border-color); font-size: 1rem; font-family: var(--font-family); 
+            transition: border-color 0.2s, box-shadow 0.2s; background-color: #fcfdff;
+        }
+        .form-group input:focus { 
+            outline: none; border-color: var(--primary-accent); 
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); 
+        }
+        .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-secondary); padding: 0.25rem; }
+
+        .form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .remember-me { display: flex; align-items: center; gap: 0.5rem; }
+        .remember-me label { margin: 0; color: var(--text-secondary); font-weight: 500; cursor: pointer; }
+        .remember-me input[type="checkbox"] { width: auto; accent-color: var(--primary-accent); }
+
+        .view-switcher { color: var(--primary-accent); text-decoration: none; font-size: 0.9rem; font-weight: 500; background: none; border: none; cursor: pointer; padding: 0; }
+        .view-switcher:hover { text-decoration: underline; color: var(--primary-accent-hover); }
+
+        .redirect-link { text-align: center; margin-top: 1.5rem; font-size: 0.95rem; }
+        .redirect-link .view-switcher { font-weight: 600; font-size: 0.95rem; }
+
+        .btn { 
+            width: 100%; padding: 0.85rem; border-radius: var(--border-radius-md); font-size: 1rem; font-weight: 600; 
+            cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 0.75rem; border: 1px solid transparent; 
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary { background-color: var(--primary-accent); color: var(--bg-white); }
+        .btn-primary:hover:not(:disabled) { background-color: var(--primary-accent-hover); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn:disabled { background-color: #a5b4fc !important; border-color: #a5b4fc !important; cursor: not-allowed; opacity: 0.8; }
+
+        .btn-social { background-color: var(--bg-white); color: var(--text-dark); border-color: var(--border-color); }
+        .btn-social:hover:not(:disabled) { border-color: #d1d5db; background-color: #f9fafb; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn-social .google-logo { width: 20px; height: 20px; }
+
+        .divider { display: flex; align-items: center; text-align: center; color: var(--text-secondary); margin: 1.75rem 0; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
+        .divider-text { padding: 0 1rem; font-size: 0.9rem; }
+
+        .spinner { width: 18px; height: 18px; border: 2px solid rgba(255, 255, 255, 0.3); border-top-color: #ffffff; border-radius: 50%; animation: spin 1s linear infinite; }
+        .btn-social .spinner { border-color: rgba(0,0,0,0.2); border-top-color: var(--text-dark); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- [ จุดที่ 5: ปรับปรุง Toast Notification ] --- */
+        #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.75rem; }
+        .toast-notification { 
+            min-width: 320px; max-width: 380px; padding: 1rem 1.25rem; border-radius: var(--border-radius-md); 
+            box-shadow: var(--shadow-lg); border-left: 4px solid transparent; display: flex; align-items: center; gap: 1rem; 
+            font-weight: 500; background-color: var(--bg-white);
+            animation: slideInUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), fadeOut 0.5s ease 4.5s forwards; 
+        }
+        .toast-notification.error { color: var(--text-dark); border-left-color: var(--danger-text); }
+        .toast-notification.success { color: var(--text-dark); border-left-color: var(--success-text); }
+        .toast-icon { font-size: 1.25rem; }
+        .toast-icon.error { color: var(--danger-text); }
+        .toast-icon.success { color: var(--success-text); }
+        .toast-content { flex-grow: 1; }
+        .toast-notification .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: inherit; opacity: 0.6; padding: 0; line-height: 1; }
+        .toast-notification .close-btn:hover { opacity: 1; }
+        @keyframes slideInUp { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: scale(0.9); } }
+
+    </style>
+</head>
+<body>
+    <div id="toast-container" aria-live="polite"></div>
+
+    <div class="main-container">
+        <div class="hero-panel">
+            <div class="hero-overlay">
+                <h1>เรียนให้ฉลาดขึ้น ไม่ใช่แค่หนักขึ้น</h1>
+                <p>ให้ Learnney ช่วยเปลี่ยนความขยันของคุณให้กลายเป็นความเข้าใจที่ยั่งยืน ทบทวนอย่างเป็นระบบ และติดตามความคืบหน้าได้ง่ายกว่าเดิม</p>
+                <div class="hero-quote">
+                    "เคล็ดลับของการก้าวไปข้างหน้า คือการเริ่มต้นลงมือทำ"
+                </div>
+            </div>
+        </div>
+
+        <div class="form-panel">
+            <main class="form-wrapper">
+                <section id="login-view" class="view">
+                    <div class="form-header"><a href="#"><i class="fa-solid fa-check-double"></i> Learnney</a></div>
+                    <h2>เข้าสู่ระบบ</h2>
+                    <p class="form-intro">ยินดีต้อนรับกลับมา!</p>
+                    <form id="login-form" novalidate>
+                        <div class="form-group"><label for="login-email">อีเมล</label><div class="input-wrapper"><i class="fa-solid fa-envelope input-icon"></i><input type="email" id="login-email" required autocomplete="email"></div></div>
+                        <div class="form-group"><label for="login-password">รหัสผ่าน</label><div class="input-wrapper"><i class="fa-solid fa-lock input-icon"></i><input type="password" id="login-password" required autocomplete="current-password"><button type="button" class="password-toggle" aria-label="แสดงรหัสผ่าน"><i class="fa-solid fa-eye"></i></button></div></div>
+                        <div class="form-options"><div class="remember-me"><input type="checkbox" id="remember-me" checked><label for="remember-me">จดจำฉันไว้</label></div><button type="button" class="view-switcher" data-view-target="reset-view">ลืมรหัสผ่าน?</button></div>
+                        <button type="submit" class="btn btn-primary"><span class="btn-text">เข้าสู่ระบบ</span></button>
+                    </form>
+                    <div class="divider"><span class="divider-text">หรือ</span></div>
+                    <button id="google-signin-btn" class="btn btn-social">
+                        <svg class="google-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.657-3.356-11.303-7.962l-6.571,4.819C9.656,39.663,16.318,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.082,5.571l6.19,5.238C42.022,35.283,44,30.033,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
+                        <span class="btn-text">ดำเนินการต่อด้วย Google</span>
+                    </button>
+                    <div class="redirect-link">ยังไม่มีบัญชี? <button type="button" class="view-switcher" data-view-target="register-view">สร้างบัญชีที่นี่</button></div>
+                </section>
+
+                <section id="register-view" class="view hidden">
+                    <div class="form-header"><a href="#"><i class="fa-solid fa-check-double"></i> Learnney</a></div>
+                    <h2>สร้างบัญชีใหม่</h2>
+                    <p class="form-intro">เริ่มต้นเส้นทางการเรียนรู้ของคุณได้ฟรี!</p>
+                    <form id="register-form" novalidate>
+                        <div class="form-group"><label for="register-email">อีเมล</label><div class="input-wrapper"><i class="fa-solid fa-envelope input-icon"></i><input type="email" id="register-email" required autocomplete="email"></div></div>
+                        <div class="form-group"><label for="register-password">รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)</label><div class="input-wrapper"><i class="fa-solid fa-lock input-icon"></i><input type="password" id="register-password" required autocomplete="new-password" minlength="6"><button type="button" class="password-toggle" aria-label="แสดงรหัสผ่าน"><i class="fa-solid fa-eye"></i></button></div></div>
+                        <div class="form-group"><label for="register-confirm-password">ยืนยันรหัสผ่าน</label><div class="input-wrapper"><i class="fa-solid fa-check-double input-icon"></i><input type="password" id="register-confirm-password" required autocomplete="new-password"><button type="button" class="password-toggle" aria-label="แสดงรหัสผ่าน"><i class="fa-solid fa-eye"></i></button></div></div>
+                        <button type="submit" class="btn btn-primary"><span class="btn-text">สร้างบัญชี</span></button>
+                    </form>
+                    <div class="redirect-link">มีบัญชีอยู่แล้ว? <button type="button" class="view-switcher" data-view-target="login-view">เข้าสู่ระบบที่นี่</button></div>
+                </section>
+
+                <section id="reset-view" class="view hidden">
+                    <div class="form-header"><a href="#"><i class="fa-solid fa-check-double"></i> Learnney</a></div>
+                    <h2>รีเซ็ตรหัสผ่าน</h2>
+                    <p class="form-intro">กรอกอีเมลเพื่อรับลิงก์สำหรับรีเซ็ตรหัสผ่าน</p>
+                    <form id="reset-form" novalidate>
+                        <div class="form-group"><label for="reset-email">อีเมล</label><div class="input-wrapper"><i class="fa-solid fa-envelope input-icon"></i><input type="email" id="reset-email" required autocomplete="email"></div></div>
+                        <button type="submit" class="btn btn-primary"><span class="btn-text">ส่งลิงก์</span></button>
+                    </form>
+                    <div class="redirect-link"><button type="button" class="view-switcher" data-view-target="login-view">กลับไปหน้าเข้าสู่ระบบ</button></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const firebaseConfig = {
+                apiKey: "AIzaSyBnwFv0EZ3w9Eefj5KyJfhHX8sG2mtqQKE",
+                authDomain: "learnney-website.firebaseapp.com",
+                projectId: "learnney-website",
+                storageBucket: "learnney-website.appspot.com",
+                messagingSenderId: "538185783655",
+                appId: "1:538185783655:web:ce277fc81c9930a907f7c2"
+            };
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const db = firebase.firestore();
+
+            const views = document.querySelectorAll('.view');
+            const viewSwitchers = document.querySelectorAll('.view-switcher');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const resetForm = document.getElementById('reset-form');
+            const googleSigninBtn = document.getElementById('google-signin-btn');
+
+            const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+            const toastContainer = document.getElementById('toast-container');
+            function showToastNotification(message, type = 'error') {
+                const icons = { error: 'fa-circle-xmark', success: 'fa-circle-check' };
+                const toast = document.createElement('div');
+                toast.className = `toast-notification ${type}`;
+                toast.innerHTML = `<i class="fa-solid ${icons[type]} toast-icon ${type}"></i><div class="toast-content">${message}</div><button class="close-btn" aria-label="ปิด">&times;</button>`;
+                toastContainer.appendChild(toast);
+                const removeToast = () => {
+                    toast.style.animationName = 'fadeOut';
+                    toast.addEventListener('animationend', () => toast.remove(), { once: true });
+                };
+                toast.querySelector('.close-btn').addEventListener('click', removeToast);
+                setTimeout(removeToast, 5000);
+            }
+
+            function toggleButtonLoading(button, isLoading) {
+                if (!button) return;
+                const buttonText = button.querySelector('.btn-text');
+                button.disabled = isLoading;
+                if (isLoading) {
+                    if (buttonText) buttonText.style.display = 'none';
+                    if (!button.querySelector('.spinner')) {
+                        const spinner = document.createElement('div');
+                        spinner.className = 'spinner';
+                        if (button.classList.contains('btn-social')) {
+                            spinner.style.borderColor = 'rgba(0,0,0,0.2)';
+                            spinner.style.borderTopColor = 'var(--text-dark)';
+                        }
+                        button.prepend(spinner);
+                    }
+                } else {
+                    if (buttonText) buttonText.style.display = 'inline';
+                    const spinner = button.querySelector('.spinner');
+                    if (spinner) spinner.remove();
+                }
+            }
+
+            function getFirebaseAuthErrorMessage(code) {
+                const messages = { 'auth/user-not-found':'ไม่พบบัญชีผู้ใช้','auth/wrong-password':'รหัสผ่านไม่ถูกต้อง','auth/invalid-credential':'อีเมลหรือรหัสผ่านไม่ถูกต้อง','auth/invalid-email':'รูปแบบอีเมลไม่ถูกต้อง','auth/email-already-in-use':'อีเมลนี้มีผู้ใช้งานแล้ว','auth/weak-password':'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร','auth/network-request-failed':'การเชื่อมต่อล้มเหลว','auth/too-many-requests':'ส่งคำขอมากเกินไป','auth/popup-closed-by-user':'หน้าต่างล็อกอินถูกปิด','auth/account-exists-with-different-credential':'มีบัญชีที่ใช้อีเมลนี้แล้ว','auth/popup-blocked-by-browser':'เบราว์เซอร์บล็อกหน้าต่างล็อกอิน',};
+                return messages[code] || 'เกิดข้อผิดพลาดที่ไม่คาดคิด';
+            }
+
+            function validateInput(email, password, confirmPassword) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email?.trim()) return 'กรุณากรอกอีเมล';
+                if (!emailRegex.test(email)) return 'รูปแบบอีเมลไม่ถูกต้อง';
+                if (password !== undefined) {
+                    if (!password) return 'กรุณากรอกรหัสผ่าน';
+                    if (password.length < 6) return 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+                }
+                if (confirmPassword !== undefined && password !== confirmPassword) return 'รหัสผ่านไม่ตรงกัน';
+                return null;
+            }
+
+            function showView(targetViewId) { views.forEach(view => view.classList.toggle('hidden', view.id !== targetViewId)); }
+
+            async function addDefaultDataForNewUser(newUserUid) {
+                const batch = db.batch();
+                try {
+                    const response = await fetch('learnney_data.json');
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const DEFAULT_DATA = await response.json();
+
+                    const subjectNameMap = new Map();
+                    const subjectsCollection = db.collection('users').doc(newUserUid).collection('subjects');
+                    const topicsCollection = db.collection('users').doc(newUserUid).collection('topics');
+
+                    DEFAULT_DATA.subjects.forEach(subjectData => {
+                        const subjectRef = subjectsCollection.doc();
+                        batch.set(subjectRef, { name: subjectData.name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                        subjectNameMap.set(subjectData.name, subjectRef.id);
+                    });
+
+                    DEFAULT_DATA.topics.forEach(topicData => {
+                        const subjectId = subjectNameMap.get(topicData.subjectName);
+                        if (subjectId) {
+                            const topicRef = topicsCollection.doc();
+                            batch.set(topicRef, {
+                                name: topicData.name, subjectId, type: "flashcard",
+                                front: topicData.front || '', back: topicData.back || '',
+                                stability: 0, difficulty: 0, state: 'Pending',
+                                lastReview: null, nextReview: null,
+                                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                reviewHistory: [], reflectionHistory: [],
+                            });
+                        }
+                    });
+                    await batch.commit();
+                    console.log(`เพิ่มข้อมูลเริ่มต้นสำหรับ ${newUserUid} สำเร็จ`);
+                } catch (error) {
+                    console.error("Error adding default data:", error);
+                    showToastNotification('เกิดข้อผิดพลาดในการตั้งค่าบัญชีเริ่มต้น');
+                }
+            }
+
+            async function handleSuccessfulSignIn(result) {
+                const user = result.user;
+                if (result.additionalUserInfo?.isNewUser) {
+                    console.log(`New user (${user.email}) signed up. Adding default data...`);
+                    await addDefaultDataForNewUser(user.uid);
+                }
+                showToastNotification(`ยินดีต้อนรับ, ${user.displayName || user.email}!`, 'success');
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+            }
+
+            viewSwitchers.forEach(switcher => switcher.addEventListener('click', (e) => showView(e.currentTarget.dataset.viewTarget)));
+            document.querySelectorAll('.password-toggle').forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const pInput = toggle.previousElementSibling, icon = toggle.querySelector('i');
+                    const isPwd = pInput.type === 'password';
+                    pInput.type = isPwd ? 'text' : 'password';
+                    icon.classList.toggle('fa-eye', !isPwd);
+                    icon.classList.toggle('fa-eye-slash', isPwd);
+                });
+            });
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = loginForm.querySelector('.btn-primary');
+                const email = loginForm['login-email'].value, password = loginForm['login-password'].value;
+                const validationError = validateInput(email, password);
+                if (validationError) return showToastNotification(validationError);
+
+                toggleButtonLoading(btn, true);
+                const persistence = loginForm['remember-me'].checked ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
+                try {
+                    await auth.setPersistence(persistence);
+                    const result = await auth.signInWithEmailAndPassword(email, password);
+                    await handleSuccessfulSignIn(result);
+                } catch (error) {
+                    showToastNotification(getFirebaseAuthErrorMessage(error.code));
+                    toggleButtonLoading(btn, false);
+                }
+            });
+
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = registerForm.querySelector('.btn-primary');
+                const email = registerForm['register-email'].value, password = registerForm['register-password'].value, confirm = registerForm['register-confirm-password'].value;
+                const validationError = validateInput(email, password, confirm);
+                if (validationError) return showToastNotification(validationError);
+
+                toggleButtonLoading(btn, true);
+                try {
+                    const result = await auth.createUserWithEmailAndPassword(email, password);
+                    await handleSuccessfulSignIn(result);
+                } catch (error) {
+                    showToastNotification(getFirebaseAuthErrorMessage(error.code));
+                    toggleButtonLoading(btn, false);
+                }
+            });
+
+            googleSigninBtn.addEventListener('click', async () => {
+                toggleButtonLoading(googleSigninBtn, true);
+                try {
+                    const result = await auth.signInWithPopup(googleProvider);
+                    await handleSuccessfulSignIn(result);
+                } catch (error) {
+                    showToastNotification(getFirebaseAuthErrorMessage(error.code));
+                    toggleButtonLoading(googleSigninBtn, false);
+                }
+            });
+
+            resetForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = resetForm.querySelector('.btn-primary');
+                const email = resetForm['reset-email'].value;
+                const validationError = validateInput(email);
+                if (validationError) return showToastNotification(validationError);
+
+                toggleButtonLoading(btn, true);
+                try {
+                    await auth.sendPasswordResetEmail(email);
+                    showToastNotification('ส่งลิงก์สำหรับรีเซ็ตรหัสผ่านไปที่อีเมลของคุณแล้ว', 'success');
+                    setTimeout(() => showView('login-view'), 3000);
+                } catch (error) {
+                    showToastNotification(getFirebaseAuthErrorMessage(error.code));
+                } finally {
+                    toggleButtonLoading(btn, false);
+                }
+            });
+
+            showView('login-view');
+        });
+    </script>
+</body>
+</html>
